@@ -1,0 +1,14 @@
+{
+  "name": "gommand",
+  "version": "0.1.1",
+  "description": "Run project commands from anywhere — save commands with their paths and run them globally",
+  "type": "module",
+  "bin": {
+    "gommand": "./bin/gommand.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["cli", "commands", "global", "makefile", "task-runner", "shortcuts"],
+  "license": "MIT"
+}
