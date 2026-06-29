@@ -1,14 +1,34 @@
 {
   "name": "gommand",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Run project commands from anywhere — save commands with their paths and run them globally",
+  "keywords": [
+    "cli",
+    "commands",
+    "global",
+    "makefile",
+    "task-runner",
+    "shortcuts"
+  ],
+  "homepage": "https://github.com/Bayturan/gommand#readme",
+  "bugs": {
+    "url": "https://github.com/Bayturan/gommand/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bayturan/gommand.git"
+  },
+  "license": "MIT",
+  "author": "bayturan",
   "type": "module",
+  "main": "index.js",
   "bin": {
-    "gommand": "./bin/gommand.js"
+    "gommand": "bin/gommand.js"
+  },
+  "scripts": {
+    "test": "node --test"
   },
   "engines": {
     "node": ">=18"
-  },
-  "keywords": ["cli", "commands", "global", "makefile", "task-runner", "shortcuts"],
-  "license": "MIT"
+  }
 }

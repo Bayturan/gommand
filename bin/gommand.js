@@ -4,8 +4,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, resolve } from 'node:path';
 
-const VERSION = '1.1.0';
-const CONFIG_DIR = join(homedir(), '.gommand');
+const VERSION = '0.1.2';
+const CONFIG_DIR = process.env.GOMMAND_DIR ?? join(homedir(), '.gommand');
 const CONFIG_FILE = join(CONFIG_DIR, 'commands.json');
 
 function load() {
@@ -92,6 +92,10 @@ if (saveFlag) {
     case 'edit':
     case 'update':
       cmdEdit(rest, pathFlagSet ? workDir : null);
+      break;
+    case 'test':
+    case 'check':
+      cmdTest(rest.join(' '));
       break;
     default:
       cmdRun(positional.join(' '), extraArgs);
@@ -189,6 +193,24 @@ function cmdShow(name) {
   const exists = existsSync(entry.path);
   console.log(`  Status:  ${exists ? 'path ok' : 'WARNING: path does not exist'}`);
   console.log('');
+}
+
+// ─── test ────────────────────────────────────────────────────────────────────
+// gommand test <name>  — dry-run: validate path and show what would run
+function cmdTest(name) {
+  if (!name) die('no name provided', 'gommand test <name>');
+  const commands = load();
+  const entry = commands[name];
+  if (!entry) die(`no command named "${name}"`);
+
+  const pathOk = existsSync(entry.path);
+  console.log('');
+  console.log(`  Name:    ${name}`);
+  console.log(`  Command: ${entry.command}`);
+  console.log(`  Path:    ${entry.path}`);
+  console.log(`  Status:  ${pathOk ? 'OK' : 'FAIL — path does not exist'}`);
+  console.log('');
+  if (!pathOk) process.exit(1);
 }
 
 // ─── rename ──────────────────────────────────────────────────────────────────
@@ -295,6 +317,7 @@ USAGE
   gommand add --path <dir> <cmd> as <name>     Save with specific directory
   gommand list                                 List all saved commands
   gommand show <name>                          Show details for one command
+  gommand test <name>                          Validate path and dry-run check
   gommand rename <old> to <new>                Rename a command
   gommand edit <name> --cmd <cmd>              Update the command string
   gommand edit --path <dir> <name>             Update the working directory
@@ -307,7 +330,7 @@ FLAG SYNTAX (alternative save)
 
 ALIASES
   add → save    list → ls    remove → rm, del    rename → mv
-  edit → update    show → info
+  edit → update    show → info    test → check
 
 EXAMPLES
   cd ~/dev/x
